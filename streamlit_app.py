@@ -6,7 +6,7 @@ from sklearn import tree
 from sklearn.model_selection import train_test_split
 
 # Load and preprocess the Titanic dataset
-@st.cache
+@st.cache_data  # Use st.cache_data for caching data-related functions
 def load_data():
     df = pd.read_csv('titanic.csv')
     df = df.drop(['PassengerId', 'Name', 'SibSp', 'Parch', 'Ticket', 'Cabin', 'Embarked'], axis='columns')
@@ -17,9 +17,9 @@ def load_data():
     target = df['Survived']
     return input_features, target
 
-@st.cache
+@st.cache_resource  # Use st.cache_resource for model training and similar operations
 def train_model(input_features, target):
-    X_train, X_test, y_train, y_test = train_test_split(input_features, target, test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(input_features, target, test_size=0.2, random_state=42)
     model = tree.DecisionTreeClassifier()
     model.fit(X_train, y_train)
     return model
@@ -37,7 +37,7 @@ Provide the input details below and click 'Predict'.
 """)
 
 # User input fields
-st.header("Passenger Details")
+st.header("Passenger Detailss")
 
 pclass = st.selectbox("Passenger Class (1 = First, 2 = Second, 3 = Third):", [1, 2, 3], index=2)
 age = st.number_input("Age:", min_value=0.0, max_value=100.0, value=25.0, step=1.0)
